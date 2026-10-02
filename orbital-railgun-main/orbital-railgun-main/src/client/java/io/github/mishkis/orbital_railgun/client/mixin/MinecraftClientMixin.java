@@ -5,16 +5,12 @@ import io.github.mishkis.orbital_railgun.client.rendering.OrbitalRailgunGuiShade
 import io.github.mishkis.orbital_railgun.client.rendering.OrbitalRailgunShader;
 import io.github.mishkis.orbital_railgun.item.OrbitalRailgunItem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,8 +18,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.function.Supplier;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -43,11 +37,7 @@ public class MinecraftClientMixin {
                 OrbitalRailgunShader.INSTANCE.BlockPosition = blockHitResult.getBlockPos().toCenterPos().toVector3f();
                 OrbitalRailgunShader.INSTANCE.Dimension = player.getWorld().getRegistryKey();
 
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeItemStack(orbitalRailgun.getDefaultStack());
-                buf.writeBlockPos(blockHitResult.getBlockPos());
-
-                ClientPlayNetworking.send(OrbitalRailgun.SHOOT_PACKET_ID, buf);
+                ClientPlayNetworking.send(new OrbitalRailgun.ShootPacketPayload(orbitalRailgun.getDefaultStack(), blockHitResult.getBlockPos()));
             }
         }
     }
