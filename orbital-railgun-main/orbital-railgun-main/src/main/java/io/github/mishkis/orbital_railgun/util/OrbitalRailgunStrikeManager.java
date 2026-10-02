@@ -38,13 +38,15 @@ public class OrbitalRailgunStrikeManager {
 
                 ServerWorld world = server.getWorld(dimension);
 
-                entities.forEach(entity -> {
-                    if (entity.getWorld().getRegistryKey() == dimension && entity.getPos().subtract(blockPos.toCenterPos()).lengthSquared() <= RADIUS_SQUARED) {
-                        entity.damage(new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).getEntry(STRIKE_DAMAGE).get()), 100000f);
-                    }
-                });
+                if (world != null) {
+                    entities.forEach(entity -> {
+                        if (entity.getWorld().getRegistryKey() == dimension && entity.getPos().subtract(blockPos.toCenterPos()).lengthSquared() <= RADIUS_SQUARED) {
+                            entity.damage(world, new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).getEntry(STRIKE_DAMAGE).get()), 100000f);
+                        }
+                    });
 
-                explode(blockPos, world);
+                    explode(blockPos, world);
+                }
             } else if (age >= 400) {
                 entities.forEach(entity -> {
                     if (entity instanceof PlayerEntity player && player.isSpectator()) {
