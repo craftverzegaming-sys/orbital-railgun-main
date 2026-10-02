@@ -13,11 +13,11 @@ public class OrbitalRailgunItems {
     public static final OrbitalRailgunItem ORBITAL_RAILGUN = (OrbitalRailgunItem) register(new OrbitalRailgunItem(), "orbital_railgun");
 
     public static Item register(Item item, String id) {
-		Identifier itemID = new Identifier(OrbitalRailgun.MOD_ID, id);
-		return  Registry.register(Registries.ITEM, itemID, item);
-	}
-	
-	public static void initialize() {
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(fabricItemGroupEntries -> fabricItemGroupEntries.addAfter(Items.CROSSBOW, ORBITAL_RAILGUN) );
-	}
+        Identifier itemID = Identifier.of(OrbitalRailgun.MOD_ID, id);
+        return Registry.register(Registries.ITEM, itemID, item);
+    }
+    
+    public static void initialize() {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(fabricItemGroupEntries -> fabricItemGroupEntries.addAfter(Items.CROSSBOW, ORBITAL_RAILGUN));
+    }
 }
